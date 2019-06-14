@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import dev.main.Handler;
+import dev.util.Output;
 
 public class ObjectManager {
 
@@ -14,16 +15,19 @@ public class ObjectManager {
 	private int mouseX, mouseY;
 	private int counter = 0;
 	
+	private Output output;
+	
 	public ObjectManager(Handler handler) {
 		this.handler = handler;
 		windowObjects = new ArrayList<WindowObject>();
 	}
 	
 	public void tick() {
+		getInput(windowObjects);
 		for (WindowObject wo : windowObjects) {
 			wo.tick();
 		}
-		System.out.println(windowObjects.size());
+		//System.out.println(windowObjects.size());
 	}
 	
 	public void render(Graphics g) {
@@ -70,9 +74,24 @@ public class ObjectManager {
 	public void onMouseClicked(MouseEvent e) {
 		mouseX = e.getX();
 		mouseY = e.getY();
-		//System.out.println(mouseX + " " + mouseY);
-		Point point = new Point(mouseX, mouseY, handler);
-		addObject(point);
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			if (mouseX <= 480 && mouseY <= 480) {
+				//System.out.println(mouseX + " " + mouseY);
+				Point point = new Point(mouseX, mouseY, handler);
+				addObject(point);
+			}
+			//System.out.println("Left Pressed");
+		} else if (e.getButton() == MouseEvent.BUTTON3) {
+			int a = windowObjects.size();
+			if (a > 0) {
+				windowObjects.remove(a - 1);
+			}
+			//System.out.println("Right Pressed");
+		} else if (e.getButton() == MouseEvent.BUTTON2) {
+			output = new Output(windowObjects);
+			output.write();
+			//System.out.println("Middle Pressed");
+		}
 	}
 	
 	void drawConnections(ArrayList<WindowObject> objects, Graphics g) {
@@ -88,6 +107,30 @@ public class ObjectManager {
 				}
 			}
 			//g.drawLine((int) objects.get(s - 1).x, (int) objects.get(s - 1).y, (int) objects.get(0).x, (int) objects.get(0).y);
+		}
+	}
+	
+	private void getInput(ArrayList<WindowObject> wobs) {
+		if (handler.getKeyManager().delete) {
+			System.out.println("Delete");
+			int h = wobs.size();
+			//if (h > 0) {
+				for (int i = h; i >= 0; i--) {
+					wobs.remove(i);
+				}
+			//}
+			setObjects(wobs);
+		}
+		if (handler.getKeyManager().enter) {
+			System.out.println("Enter");
+		}
+		if (handler.getKeyManager().backspace) {
+			System.out.println("Backspace");
+			int h = wobs.size();
+			if (h > 0) {
+				wobs.remove(h - 1);
+			}
+			setObjects(wobs);
 		}
 	}
 	

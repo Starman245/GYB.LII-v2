@@ -25,7 +25,7 @@ public class Handler {
 		return workstation.getUIManager();
 	}
 	
-	public KeyManager getKeyManger() {
+	public KeyManager getKeyManager() {
 		return workstation.getKeyManager();
 	}
 	

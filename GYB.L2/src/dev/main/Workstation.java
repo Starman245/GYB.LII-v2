@@ -8,6 +8,7 @@ import dev.display.Display;
 import dev.input.KeyManager;
 import dev.input.MouseManager;
 import dev.tools.Tool;
+import dev.ui.UILabel;
 import dev.ui.UIManager;
 import dev.window.ObjectManager;
 
@@ -58,16 +59,17 @@ public class Workstation implements Runnable {
 		
 		handler = new Handler(this);
 		
-		keyManager = new KeyManager();
+		keyManager = new KeyManager(handler);
 		uiManager = new UIManager(handler);
 		objectManager = new ObjectManager(handler);
 		mouseManager = new MouseManager(handler);
 	}
 	
 	private void tick() {
-		keyManager.tick();
 		mouseManager.tick();
+		uiManager.tick();
 		objectManager.tick();
+		keyManager.tick();
 	}
 	
 	private void render() {
@@ -134,7 +136,7 @@ public class Workstation implements Runnable {
 			}
 			
 			if(timer >= 1000000000){
-				System.out.println("Ticks and Frames: " + ticks);
+				//System.out.println("Ticks and Frames: " + ticks); // //-----------------------------------------------
 				ticks = 0;
 				timer = 0;
 			}
