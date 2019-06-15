@@ -19,6 +19,12 @@ public class Output {
 		try {
             FileWriter writer = new FileWriter("output.txt", true);
             BufferedWriter bufferedWriter = new BufferedWriter(writer);
+            
+            bufferedWriter.write("0 0 " + 
+            		Integer.toString((int) array.get(0).getX()) + " " +
+            		Integer.toString((int) array.get(0).getY())
+            		);
+            bufferedWriter.newLine();
  
             for (int z = 0; z < array.size() - 1; z++) {
             	String a = "", b = "", c = "", d = "";
